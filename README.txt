@@ -57,3 +57,7 @@ Example:
                     DNS:test.com
         ...
 
+    Check that Chrome takes the certificate: 
+
+      - https://dl.filla.be/f0HzxmUr3
+
