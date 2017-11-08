@@ -6,6 +6,10 @@ Usage:
   
   certgen [domain [...]]
 
+Requirements:
+
+  - openssl
+
 Example:
   
   Suppose we want to generate a certificate for `test.com`
