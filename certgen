@@ -49,6 +49,9 @@ DNS.1                   = $domain
   echo "$conf_file"
 }
 
+# Generates a set of 3 files - a private key, a certificate and the
+# concatenation of these two (used by haproxy) - in the current
+# working directory.
 generate_cert() {
   local dir_name="."
   local domain=$1
