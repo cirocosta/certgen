@@ -3,9 +3,20 @@
 set -o errexit
 
 main() {
-  for domain in "$@"; do
-    generate_cert "$domain"
-  done
+  local domain=$1
+
+  if [[ -z "$domain" ]]; then
+    echo "ERROR: At least one domain must be specified.
+
+  Usage:  certgen <domain>
+
+Aborting."
+    exit 1
+  fi
+
+  set -o nounset
+
+  generate_cert "$domain"
 }
 
 # Generates an OpenSSL configuration file that
