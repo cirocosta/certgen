@@ -34,7 +34,7 @@ generate_openssl_conf_for_domain() {
 [ req ]
 req_extensions          = v3_req
 distinguished_name      = req_distinguished_name
-attributes		          = req_attributes
+attributes              = req_attributes
 
 [ v3_req ]
 subjectAltName          = @alt_names
