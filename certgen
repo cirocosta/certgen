@@ -6,9 +6,9 @@ main() {
   local domain=$1
 
   if [[ -z "$domain" ]]; then
-    echo "ERROR: At least one domain must be specified.
+    echo "ERROR: A domain must be specified.
 
-  Usage:  certgen <domain>
+  Usage:  certgen [domain ...]
 
 Aborting."
     exit 1
@@ -43,22 +43,7 @@ subjectAltName          = @alt_names
 DNS.1                   = $domain
 
 [ req_distinguished_name ]
-countryName			        = Country Name (2 letter code)
-countryName_min		      = 2
-countryName_max		      = 2
-stateOrProvinceName     = State or Province Name (full name)
-localityName			      = Locality Name (eg, city)
-0.organizationName    	= Organization Name (eg, company)
-organizationalUnitName	= Organizational Unit Name (eg, section)
-commonName		          = Common Name (eg, fully qualified host name)
-commonName_max         	= 64
-emailAddress	         	= Email Address
-emailAddress_max		    = 64
-
 [ req_attributes ]
-challengePassword		    = A challenge password
-challengePassword_min		= 4
-challengePassword_max		= 20
 " >$conf_file
 
   echo "$conf_file"
@@ -72,8 +57,17 @@ generate_cert() {
   local haproxy_cert="haproxy_$domain.pem"
   local openssl_conf=$(generate_openssl_conf_for_domain $domain)
 
-  ALTNAME="DNS:$domain" \
-    openssl req \
+  echo "INFO:
+  Starting certificate generation.
+  
+  DOMAIN=$domain
+  KEY_NAME=$key_name
+  CERT_NAME=$cert_name
+  HAPROXY_CERT=$haproxy_cert
+  OPENSSL_CONF=$openssl_conf
+  "
+
+  openssl req \
     -x509 \
     -sha256 \
     -newkey rsa:4096 \
@@ -88,6 +82,17 @@ generate_cert() {
   cat $key_name $cert_name >$haproxy_cert
 
   chmod 644 $haproxy_cert
+
+  echo "
+SUCCESS:
+  Certificates successfully generated.
+
+  You can inspect the certificate by issuing the following command:
+
+    openssl x509 -in $cert_name -text -noout
+
+Done.
+  "
 }
 
 main "$@"
